@@ -1,14 +1,14 @@
 
 
-const mongoose = require('mongoose')
+import mongoose from 'mongoose';
 const schema = mongoose.Schema;
 
-const t = new Date();
+
 function generate_auto_code() {
     const code = '';
     const k = 8;
     const chars = "ABCDEFJHIGKLMNOPQRSTUVWXYZ0123456789";
-    const len = chars.length();
+    const len = chars.length;
     for (let i = 0; i < k; i++){
         code += chars.charAt(Math.floor(Math.random()*len))
     };
@@ -20,14 +20,14 @@ const RoomSchema = new schema({
         type : String,
         required : true,
         unique : true,
-        default : generate_auto_code,
+
     },
     host: {
         type: String,
         required: true,
         
     },
-    guste_can_pause: {
+    guest_can_pause: {
         type: Boolean,
         required: true,
     },
@@ -37,6 +37,8 @@ const RoomSchema = new schema({
     },
     created_at: {
         type: Date,
-        default : t.now(),
+        default : Date.now(),
     }
 });
+
+export const Room = mongoose.model("room", RoomSchema);
