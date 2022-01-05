@@ -35,6 +35,13 @@ const RoomSchema = new schema({
         type: Number,
         required: true
     },
+    number_of_participants: {
+        type : Number
+
+    },
+    background: {
+        type : String
+    },
     created_at: {
         type: Date,
         default : Date.now(),
