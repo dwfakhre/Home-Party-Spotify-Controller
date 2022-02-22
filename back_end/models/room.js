@@ -1,11 +1,11 @@
 
-
+import { Image } from './images.js'
 import mongoose from 'mongoose';
 const schema = mongoose.Schema;
 
 
 function generate_auto_code() {
-    const code = '';
+    var code = '';
     const k = 8;
     const chars = "ABCDEFJHIGKLMNOPQRSTUVWXYZ0123456789";
     const len = chars.length;
@@ -20,7 +20,12 @@ const RoomSchema = new schema({
         type : String,
         required : true,
         unique : true,
-
+        default : generate_auto_code(),
+    },
+    name: {
+        type: String,
+        required: true,
+        default: 'Random Music',
     },
     host: {
         type: String,
@@ -33,14 +38,16 @@ const RoomSchema = new schema({
     },
     votes_to_skip: {
         type: Number,
-        required: true
+        required: true,
+        default: 2
     },
     number_of_participants: {
         type : Number
 
     },
     background: {
-        type : String
+        type: schema.Types.ObjectId, 
+        ref: 'Image'
     },
     created_at: {
         type: Date,
