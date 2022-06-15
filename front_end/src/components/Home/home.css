@@ -1,0 +1,64 @@
+.home-container{
+    display: flex;
+    background-color: rgb(150, 64, 184);
+    background-image: url("../../images/background.jpg");
+    border: none;
+    background-size: cover;
+    padding: 10rem 10rem;
+    position: relative;
+}
+
+.home-items{
+    position: absolute;
+    inset: 0;
+    margin: 10rem 15rem 1rem 15rem;
+    padding: 2rem;
+    border-radius: 20px;
+    background: radial-gradient( rgba(113,5,134,.7) 10% ,rgba(113,5,134,.7) 29%,rgba(248,0,255,0.7) 70%,rgba(255, 255, 255, .7) 100%) ;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 20px;
+    flex-direction: column;
+}
+.home-title{
+    display: flex;
+    font-style: italic;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: rgb(250, 250, 250);
+
+}
+.home-buttons{
+    justify-content: center;
+    align-items: center;
+    margin: 15rem 0;
+    
+}
+.home-buttons button{
+    border: 0px;
+    width: 190px;
+    height: 60px;
+    font-size:x-large;
+    
+    
+    
+}
+.home-button-join{
+    background-color: rgba(245, 38, 183, 0.76);
+    color:aliceblue;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+
+}
+.home-create{
+    background-color: rgba(137, 43, 226, 0.89);
+    color: rgb(255, 255, 255);
+    border-left: 2px;
+    border-left-color: black;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}

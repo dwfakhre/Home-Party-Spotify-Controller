@@ -1,0 +1,137 @@
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+
+<styles.Navbar bg="dark" variant="dark" expand="lg">
+    <styles.Container fluid>
+        <styles.Navbar.Brand href="#">Navbar scroll</styles.Navbar.Brand>
+        <styles.Navbar.Toggle />
+
+        <styles.Nav className="me-auto my-3 my-lg-0" >
+            <styles.Nav.Link href="#action1">Home</styles.Nav.Link>
+            <styles.Nav.Link href="#action2">Link</styles.Nav.Link>
+            <styles.NavDropdown title="Link" id="navbarScrollingDropdown">
+                <styles.NavDropdown.Item href="#action3">Action</styles.NavDropdown.Item>
+                <styles.NavDropdown.Item href="#action4">Another action</styles.NavDropdown.Item>
+                <styles.NavDropdown.Divider />
+                <styles.NavDropdown.Item href="#action5">
+                    Something else here
+                </styles.NavDropdown.Item>
+            </styles.NavDropdown>
+            <styles.Nav.Link href="#" disabled>
+                Link
+            </styles.Nav.Link>
+        </styles.Nav>
+
+
+    </styles.Container>
+</styles.Navbar>
+<div calss=''>
+    <div class=''>
+        <formgroup action="get" >
+            <input type="search" name="" id="">
+        </form>
+    </div>
+</div>
+<div class="card left">
+    <div class="roomblock">
+        <h4>room name</h4><p>by host</p>
+        <button type="submit"></button>
+    </div>
+    <div class="roomblock">
+        <h4>room name</h4>
+        <p>by host</p>
+        <button type="submit"></button>
+    </div>
+    <div class="roomblock">
+        <h4>room name</h4>
+        <p>by host</p>
+        <button type="submit"></button>
+    </div>
+    <div class="roomblock">
+        <h4>room name</h4>
+        <p>by host</p>
+        <button type="submit"></button>
+    </div>
+</div>
+<div>
+    <div>
+        <form action="" method="post">
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                </div>
+            </div>
+            <fieldset class="form-group">
+                <div class="row">
+                    <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                            <label class="form-check-label" for="gridRadios1">
+                                First radio
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                            <label class="form-check-label" for="gridRadios2">
+                                Second radio
+                            </label>
+                        </div>
+                        <div class="form-check disabled">
+                            <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3"
+                                disabled>
+                            <label class="form-check-label" for="gridRadios3">
+                                Third disabled radio
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group row">
+                <div class="col-sm-2">Checkbox</div>
+                <div class="col-sm-10">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="gridCheck1">
+                        
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label for="votestoskip">Votes to skip</label>
+                <input type="number" id="votestoskip" value=2>
+            
+            </div>
+            <div class="form-group">
+                <label for="Image">Add a background image</label>
+                <input type="file" class="form-control-file" id="Image">
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Sign in</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+
+</html>
