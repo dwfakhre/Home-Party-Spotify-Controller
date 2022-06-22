@@ -48,6 +48,10 @@
     
 }
 .home-button-join{
+        border: 0px;
+            width: 190px;
+            height: 60px;
+            font-size: x-large;
     background-color: rgba(245, 38, 183, 0.76);
     color:aliceblue;
     border-top-left-radius: 10px;
@@ -55,6 +59,10 @@
 
 }
 .home-create{
+        border: 0px;
+            width: 190px;
+            height: 60px;
+            font-size: x-large;
     background-color: rgba(137, 43, 226, 0.89);
     color: rgb(255, 255, 255);
     border-left: 2px;

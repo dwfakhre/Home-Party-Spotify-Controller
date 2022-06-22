@@ -1,19 +1,55 @@
 import "./join.css";
-import {ImSearch} from "react-icons/im"
-import React from "react";
+import { ImSearch } from "react-icons/im";
+import React, { useState, useEffect } from "react";
+import { join_room } from "../../api/index";
+import { useNavigate } from "react-router-dom";
 
 const Joinroom = () => {
-  return (
-    <div className="home-join">
+  const [roomCode, setroomCode] = useState("");
 
-      <h1>Join an existing room</h1>
-      <form className="join-form">
-        <label className="join-form-label">
-          
-          <input type="text" name="name" className="join-form-input" />
-        </label>
-        <button type="submit" className="join-submit" ><ImSearch/></button>
-      </form>
+  const clear = () => {
+    setroomCode("");
+  };
+
+  let navigate = useNavigate();
+
+  const HandleJoinSubmit = async (e) => {
+    e.preventDefault();
+    
+    fetch(`http://192.168.137.1:5000/room/join-room`, {
+      method: "POST",
+      body: JSON.stringify({ code: roomCode }),
+      headers: { "Content-Type": "application/json" },
+    }).then((res) => res.json()).then(navigate(`/room/${roomCode}`));
+    clear();
+  };
+
+  return (
+    <div className="section__padding">
+      <div className="home-items">
+        <h1 className="home-title">Join an existing room</h1>
+        <form
+          autoComplete="off"
+          noValidate
+          className="join-form"
+          onSubmit={HandleJoinSubmit}
+        >
+          <lable className="join-form-label">
+            <input
+              type="text"
+              name="code"
+              value={roomCode}
+              onChange={(e) => {
+                setroomCode(e.target.value)
+              }}
+            />
+          </lable>
+          <button type="submit" className="join-submit">
+            <ImSearch />
+          </button>
+        </form>
+        <p></p>
+      </div>
     </div>
   );
 };

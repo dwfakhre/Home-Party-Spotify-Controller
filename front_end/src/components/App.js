@@ -1,20 +1,26 @@
-import * as style from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
+import "./Home/home.css";
 import Navbar from "./structure/navbar";
 import Home from "./Home/home";
-import Toprooms from "./TopRooms/toprooms";
-import Createroom from "./Creation/Createroom"
+import Joinroom from "./Joining/Join-room";
+import Createroom from "./Creation/Createroom";
+import Room from "./Room/Room";
 import React from "react";
-
 
 function App() {
   return (
-    <div className="app_container">
+    <Router>
       <Navbar />
-      <Home />
-
-    </div>
+      <div className="app__wrapper app_container home-container">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/join" element={<Joinroom />} />
+          <Route path="/create" element={<Createroom />} />
+          <Route path="/room/:code" element={<Room />}/>
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

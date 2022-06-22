@@ -1,26 +1,26 @@
-import * as style from "react-bootstrap";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import Toprooms from "../TopRooms/toprooms";
-import Createroom from "../Creation/Createroom"
-import Joinroom from "../Joining/Join-room";
+
 import "./home.css"
 import "../App.css"
 import React from "react";
+import {Link} from "react-router-dom"
 
 
 
 function homePage() {
   return (
-    <div className="home-container app__wrapper section__padding">
-      <div className="home-items">
-        <h1 className="home-title">WELCOME PARTY LOVER</h1>
+    <div className=" section__padding home-items">
+      <h1 className="home-title">WELCOME PARTY LOVER</h1>
 
-        <div className="home-buttons">
+      <div className="home-buttons">
+        <Link to="/join">
           <button className="home-button-join">Join a Party</button>
+        </Link>
+        <Link to="/create">
           <button className="home-create">Create a Room</button>
-        </div>
-        <Joinroom />
+        </Link>
       </div>
     </div>
   );

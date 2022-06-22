@@ -1,21 +1,5 @@
-.home-join{
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    z-index: 5;
-    background: radial-gradient(rgba(113, 5, 134, 1) 10%, rgba(113, 5, 134, 1) 29%, rgba(248, 0, 255, 1) 100%);
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-    justify-items: center;
-    border-radius: 20px;
-    flex-direction: column;
 
-}
-.home-join h1{
+h1{
     text-transform: uppercase;
     position: absolute;
     top: 2rem;
@@ -25,7 +9,10 @@
 }
 .join-form{
     border: 0px; 
+    position: absolute;
+    top: 50%;
 }
+    
 
 .join-form-input{
 
