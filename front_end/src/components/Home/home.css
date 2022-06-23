@@ -11,15 +11,18 @@
 .home-items{
     position: absolute;
     inset: 0;
+    display: grid;
     margin: 10rem 15rem 1rem 15rem;
     padding: 2rem;
     border-radius: 20px;
-    background: radial-gradient( rgba(113,5,134,.7) 10% ,rgba(113,5,134,.7) 29%,rgba(248,0,255,0.7) 70%,rgba(255, 255, 255, .7) 100%) ;
-    display: flex;
+    background: radial-gradient( rgba(113,5,134,.7) 10% ,rgba(113,5,134,.7) 29%,rgba(248,0,255,0.7) 100%);
     justify-content: space-between;
+    justify-items: center;
     align-items: center;
+    place-items: center;
+    place-content: center;
     box-shadow: 0 0 20px;
-    flex-direction: column;
+    
 }
 .home-title{
     display: flex;
