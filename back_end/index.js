@@ -5,6 +5,7 @@ import cors from "cors";
 import sessions from "express-session";
 import roomRoutes from "./routes/room-path.js";
 import welcomeRoutes from "./routes/welcome.js";
+import SpotifyRoutes from "./routes/Spotify.js"
 import cookieParser from "cookie-parser";
 import crypto from "crypto";
 import uuid from "node-uuid";
@@ -20,7 +21,7 @@ app.use(
   sessions({
     secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
     genid: function (req) {
-      return uuid.v1()
+      return uuid.v1();
     },
     saveUninitialized: true,
     cookie: { maxAge: oneDay },
@@ -33,6 +34,7 @@ app.use(cookieParser());
 
 app.use("/", welcomeRoutes);
 app.use("/room", roomRoutes);
+app.use("/spotify", SpotifyRoutes);
 
 const Connection_URL =
   "mongodb+srv://Walid:walidwalid@cluster0.f1ivs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
