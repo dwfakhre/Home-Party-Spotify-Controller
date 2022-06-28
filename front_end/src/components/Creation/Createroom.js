@@ -28,15 +28,21 @@ export default function Create() {
   const handleCreateSubmit = (e) => {
     e.preventDefault();
 
-    fetch(`http://192.168.137.1:5000/room/create-room`, {
+    fetch(`http://127.0.0.1:5000/room/create-room`, {
       method: "POST",
-      body: JSON.stringify(Room ),
+      body: JSON.stringify(Room),
       headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json()).then(navigate(`/room/${Room.code}`));
+    })
+      .then((res) => 
+        res.json()
+      )
+      .then((json) => {
+        console.log(json);
+        navigate(`/room/${json.code}`);
+      });
 
     clear();
-
-  }
+  };
 
   const clear = () => {
     setRoom({
@@ -45,8 +51,7 @@ export default function Create() {
       guest_can_pause: false,
       votes_to_skip: 1,
     });
-  }
-
+  };
 
   return (
     <div className="section__padding">

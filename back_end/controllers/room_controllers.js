@@ -64,9 +64,12 @@ export const delete_room = async (req, res) => {
 };
 
 export const get_room = async (req, res) => {
-  const id = { _id: req.params.id };
+  const code = { code: req.params.code };
+  console.log(code);
   try {
-    const req_room = Room.findById(id);
+    const req_room = Room.findOne((code = code));
+    const ishost = req.session.id == req_room.host;
+    req_room["ishost"] = ishost;
     res.status(200).json(req_room);
   } catch (error) {
     res.status(404).json({ message: "room not found" });

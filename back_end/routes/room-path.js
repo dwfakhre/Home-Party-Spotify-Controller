@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/all-rooms', get_rooms);
 
-router.get('/current-room/:id', get_room);
+router.get('/current-room/:code', get_room);
 
 router.get('/join-room', () => {
     
