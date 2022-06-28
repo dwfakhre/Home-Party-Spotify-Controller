@@ -87,3 +87,19 @@ export const search_room = async (req, res) => {
     }
 
 }
+
+export const join_room = async (req, res) => {
+  const code = req.body;
+  console.log(code);
+  console.log(req.session.id);
+  try {
+    const req_room = await Room.findOneAndUpdate(code, {
+      $inc: { number_of_participants: 1 },
+    });
+    req.session.code = req_room.code;
+    console.log(req.session.code);
+    res.status(200).json(req_room);
+  } catch (error) {
+    res.status(404).json({ message: "room not found" });
+  }
+};
