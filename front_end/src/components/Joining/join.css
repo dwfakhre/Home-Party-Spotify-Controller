@@ -17,8 +17,8 @@ h1{
 .join-form-input{
 
     
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
     background-color: rgba(255, 255, 255, 0.548);
     height: 50px;
     width: 25rem;
@@ -29,7 +29,7 @@ h1{
 }
 
 .join-submit{
-    background-color: rgba(245, 38, 183, 0.76);
+    background-color: #BACDB0;
     
     height: 50px;
     width: 100px;

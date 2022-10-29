@@ -9,7 +9,7 @@ function generate_auto_code() {
     for (let i = 0; i < k; i++) {
       temp_code += chars.charAt(Math.floor(Math.random() * len));
     }
-    console.log(Room.find({ code: temp_code }) === true);
+
   } while (Room.find({ code: temp_code }) === true);
 
   return temp_code;
@@ -17,18 +17,20 @@ function generate_auto_code() {
 
 export const create_room = async (req, res) => {
   const temp = req.body;
+
   if (!temp.code) {
     temp["code"] = generate_auto_code();
   }
   temp.host = req.session.id;
-  console.log(temp);
-
+  
+  
   const new_room = new Room(temp);
   try {
     await new_room.save();
     res.status(201).json(new_room);
+
     req.session.code = new_room.code;
-    console.log(req.session.code);
+  
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
@@ -64,26 +66,28 @@ export const delete_room = async (req, res) => {
 };
 
 export const get_room = async (req, res) => {
-  const id = { _id: req.params.id };
+  const code = req.params.code ;
+  console.log(code);
   try {
-    const req_room = Room.findById(id);
-    res.status(200).json(req_room);
+    const req_room = await Room.findOne({ code: code });
+    const is_host = req_room.host == req.session.id;
+    let temp = { ...req_room["_doc"], isHost: is_host };
+    console.log(temp);
+    res.status(200).json(temp);
   } catch (error) {
     res.status(404).json({ message: "room not found" });
   }
 };
 
-
 export const search_room = async (req, res) => {
-    const code = { code: req.params.code };
-    try {
-      const req_room = Room.findOne(code = code);
-      res.status(200).json(req_room);
-    } catch (error) {
-      res.status(404).json({ message: "room not found" });
-    }
-
-}
+  const code = { code: req.params.code };
+  try {
+    const req_room = Room.findOne((code = code));
+    res.status(200).json(req_room);
+  } catch (error) {
+    res.status(404).json({ message: "room not found" });
+  }
+};
 
 export const join_room = async (req, res) => {
   const code = req.body;

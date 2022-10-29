@@ -16,7 +16,7 @@ const Joinroom = () => {
   const HandleJoinSubmit = async (e) => {
     e.preventDefault();
     
-    fetch(`http://192.168.137.1:5000/room/join-room`, {
+    fetch(`http://localhost:5000/room/join-room`, {
       method: "POST",
       body: JSON.stringify({ code: roomCode }),
       headers: { "Content-Type": "application/json" },

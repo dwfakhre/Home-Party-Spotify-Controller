@@ -1,6 +1,6 @@
-import * as styles from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Createroom.css";
+import { create_room } from "../../api";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 
@@ -12,31 +12,28 @@ export default function Create() {
     votes_to_skip: 1,
   });
 
-  const generate_auto_code = () => {
-    var code = "";
-    const k = 8;
-    const chars = "ABCDEFJHIGKLMNOPQRSTUVWXYZ0123456789";
-    const len = chars.length;
-    for (let i = 0; i < k; i++) {
-      code += chars.charAt(Math.floor(Math.random() * len));
-    }
-    return code;
-  };
-
   const navigate = useNavigate();
 
-  const handleCreateSubmit = (e) => {
+  const handleCreateSubmit = async (e) => {
     e.preventDefault();
-
-    fetch(`http://192.168.137.1:5000/room/create-room`, {
-      method: "POST",
-      body: JSON.stringify(Room ),
-      headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json()).then(navigate(`/room/${Room.code}`));
-
+    const res = await create_room(Room, navigate);
+    console.log(res);
+    navigate(`/room/${res.code}`);
     clear();
-
-  }
+    /* fetch(`http://127.0.0.1:5000/room/create-room`, {
+      method: "POST",
+      body: JSON.stringify(Room),
+      headers: { "Content-Type": "application/json" },
+      
+    })
+      .then((res) => 
+        res.json()
+      )
+      .then((res) => {
+        console.log(res);
+        navigate(`/room/${res.code}`)
+      }); */
+  };
 
   const clear = () => {
     setRoom({
@@ -45,8 +42,7 @@ export default function Create() {
       guest_can_pause: false,
       votes_to_skip: 1,
     });
-  }
-
+  };
 
   return (
     <div className="section__padding">
@@ -62,7 +58,6 @@ export default function Create() {
               id="roomcode"
               value={Room.code}
               className="right"
-              placeholder="Code"
               onChange={(e) => {
                 setRoom({ ...Room, code: e.target.value });
               }}
@@ -77,7 +72,6 @@ export default function Create() {
               className="right"
               value={Room.name}
               id="roomname"
-              placeholder="Name"
               onChange={(e) => {
                 setRoom({ ...Room, name: e.target.value });
               }}
