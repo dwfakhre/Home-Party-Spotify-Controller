@@ -27,6 +27,14 @@ export const room_infos = async (code) => {
       .then((res) => res.data);
     return res;
   } catch (error) {
+    console.log(error)
+  }
+};
+
+/* export const spotify_auth = async () => {
+  try {
+    axios.get("http://localhost:5000/spotify/authen", no-);
+  } catch (error) {
     
   }
-}
+} */

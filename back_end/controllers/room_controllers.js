@@ -67,11 +67,11 @@ export const delete_room = async (req, res) => {
 
 export const get_room = async (req, res) => {
   const code = req.params.code ;
-  console.log(code);
   try {
     const req_room = await Room.findOne({ code: code });
     const is_host = req_room.host == req.session.id;
     let temp = { ...req_room["_doc"], isHost: is_host };
+    console.log("temp of get room ..............")
     console.log(temp);
     res.status(200).json(temp);
   } catch (error) {

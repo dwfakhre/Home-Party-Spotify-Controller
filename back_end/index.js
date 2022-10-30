@@ -17,9 +17,8 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.set("trust proxy", 1);
 app.use(
   cors({
-    origin:"http://localhost:3000",
+    origin: "http://localhost:3000",
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
-    preflightContinue: true,
     credentials: true,
   })
 );

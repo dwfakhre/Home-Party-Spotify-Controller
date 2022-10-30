@@ -3,7 +3,7 @@ import { Token } from "../models/SpotifyTokens.js";
 
 export var get_tokens = async (session_id) => {
   try {
-    const tokens = await Token.findOne((User = session_id));
+    const tokens = await Token.findOne({ User: session_id });
     return tokens;
   } catch (error) {
     console.log(error);
@@ -11,13 +11,16 @@ export var get_tokens = async (session_id) => {
   return false;
 };
 
-export var update_or_create_token = async (temp) => {
+export const update_or_create_token = async (temp) => {
+  console.log("temp of update ...........");
+  console.log(temp);
   const token = get_tokens(temp.User);
-
   if (!token) {
     const new_token = new Token(temp);
+
     try {
       await new_token.save();
+      console.log(new_token);
       return new_token;
     } catch (error) {
       console.log(error);
@@ -34,7 +37,8 @@ export var update_or_create_token = async (temp) => {
 };
 
 export var is_authenticated = async (session_id) => {
-  const token = get_tokens(session_id);
+  const token = await get_tokens(session_id);
+  console.log(token);
   if (token) {
     const date = new Date();
     if (token.expiren_in <= date) {
@@ -75,9 +79,8 @@ export var refresh_token = async (refresh_token) => {
         token_type: body.token_type,
         expires_in: expires,
       };
-        const token = await update_or_create_token(temp);
-        
+      const token = await update_or_create_token(temp);
     }
   });
-    return token;
+  return token;
 };

@@ -11,6 +11,8 @@ export default function Room() {
     guest_can_pause: false,
     host: "",
     votes: 2,
+    spotifyauth: false,
+    song: {},
   });
 
   const { code } = useParams();
@@ -20,9 +22,9 @@ export default function Room() {
   }, [code]);
 
   const get_room_infos = async () => {
-    console.log();
+
     const res = await room_infos(code);
-    console.log(res);
+    
     setRoom({
       room_code: res.code,
       name: res.name,
@@ -31,8 +33,29 @@ export default function Room() {
       host: res.host,
       guest_can_pause: res.guest_can_pause,
     });
+    auth_spotify();
   };
 
+  const auth_spotify = async () => {
+    await fetch("http://localhost:5000/spotify/is-auth", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include"
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        setRoom({ ...Room, spotifyauth: res.is_auth });
+        console.log(res.is_auth);
+        if (!res.is_auth) {
+          fetch("http://localhost:5000/spotify/authen", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+            "Access-Control-Allow-Origin": "http://localhost:3000",
+            credentials: "include"
+          });
+        }
+      });
+  };
   return (
     <h1>
       Welcome to this Room {Room.name} {Room.host}
