@@ -19,6 +19,7 @@ app.use(
   cors({
     origin: "http://localhost:3000",
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+    preflightContinue: true,
     credentials: true,
   })
 );
@@ -26,28 +27,26 @@ app.use(
 const oneDay = 1000 * 60 * 60 * 24;
 // ab229630-5626-11ed-8024-f1996196cc13
 //session middleware
-app.use(
-  sessions({
-    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
-    name: "test",
-    genid: function (req) {
-      return uuid.v1();
-    },
-    saveUninitialized: true,
-    cookie: {
-      maxAge: oneDay,
+const sessionmiddleware = sessions({
+  secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+  name: "test",
+  genid: function (req) {
+    return uuid.v1();
+  },
+  code: "fuckoff",
+  saveUninitialized: true,
+  cookie: {
+    secure: false,
+  },
+  resave: false,
 
-      secure: false,
-    },
-    resave: false,
-
-    store: MongoStore.create({
-      mongoUrl:
-        "mongodb+srv://Walid:walidwalid@cluster0.f1ivs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-      collectionName: "sessions",
-    }),
-  })
-);
+  store: MongoStore.create({
+    mongoUrl:
+      "mongodb+srv://Walid:walidwalid@cluster0.f1ivs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    collectionName: "sessions",
+  }),
+});
+app.use(sessionmiddleware);
 
 //routes
 app.use("/", welcomeRoutes);

@@ -33,16 +33,18 @@ export const authenticate_user = async (req, res) => {
   var scope =
     "user-read-playback-state user-modify-playback-state user-read-currently-playing";
 
-  await res.redirect(
+
+  const URL =
     "https://accounts.spotify.com/authorize?" +
-      new URLSearchParams({
-        response_type: "code",
-        client_id: Client_ID,
-        scope: scope,
-        redirect_uri: Redirect_URI,
-        state: state,
-      }).toString()
-  );
+    new URLSearchParams({
+      response_type: "code",
+      client_id: Client_ID,
+      scope: scope,
+      redirect_uri: Redirect_URI,
+      state: state,
+    }).toString();
+  res.status(200).json({ url: URL });
+  
   console.log("redirected");
 };
 
@@ -50,7 +52,7 @@ export const callback = async (req, res) => {
   console.log("u are in callback");
   var code = req.query.code || null;
   var state = req.query.state || null;
-  console.log(state);
+
   if (state === null) {
     res.redirect(
       "/#" +
@@ -59,8 +61,8 @@ export const callback = async (req, res) => {
         }).toString()
     );
   } else {
-    //7e8a0c50-57ef-11ed-a7da-b1792d2e47b5
-    console.log(req.session.id);
+
+
     var authOptions = {
       url: "https://accounts.spotify.com/api/token",
       form: {
@@ -72,26 +74,10 @@ export const callback = async (req, res) => {
         Authorization:
           "Basic " +
           new Buffer(Client_ID + ":" + Client_Secret).toString("base64"),
-        cred,
       },
       json: true,
     };
-    /*  const res = await axios
-      .post("https://accounts.spotify.com/api/token", {
-        code: code,
-        redirect_uri: Redirect_URI,
-        grant_type: "authorization_code",
-      }, {
-        headers: {
-          Authorization:
-            "Basic " +
-            new Buffer(Client_ID + ":" + Client_Secret).toString("base64"),
-        },
-        withCredentials: true
-        
-      }, )
-      .then((res) => res.data); 
-    console.log(res)*/
+    
     request.post(authOptions, async (error, response, body) => {
       const exp = body.expires_in;
       const expires = new Date();
@@ -105,10 +91,10 @@ export const callback = async (req, res) => {
         expires_in: expires,
       };
       const token = await update_or_create_token(temp);
-      console.log("token");
-      console.log(token);
-      const room = await Room.findOne((host = token.User));
-      return res.redirect(`http://127.0.0.1:3000/room/${room.code}`);
+
+      const room = await Room.findOne({ host: token.User });
+
+      return res.redirect(`http://localhost:3000/room/${room.code}`);
     });
   }
 };

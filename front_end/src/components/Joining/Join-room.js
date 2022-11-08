@@ -20,7 +20,11 @@ const Joinroom = () => {
       method: "POST",
       body: JSON.stringify({ code: roomCode }),
       headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json()).then(navigate(`/room/${roomCode}`));
+      credentials: "include",
+    }).then((res) => res.json()).then((data) => {
+      console.log(data);
+      navigate(`/room/${data.code}`)
+    });
     clear();
   };
 
