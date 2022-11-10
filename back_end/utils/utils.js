@@ -1,8 +1,14 @@
 import { get_room } from "../controllers/room_controllers.js";
 import { Token } from "../models/SpotifyTokens.js";
 import axios from "Axios";
+import {
+  Client_ID,
+  Client_Secret,
+  Redirect_URI,
+} from "../credentials/credentials.js";
+import request from "request";
 
-const BASE_URL = "https://api.spotify.com/v1/me/"
+const BASE_URL = "https://api.spotify.com/v1/me/";
 export var get_tokens = async (session_id) => {
   try {
     const tokens = await Token.findOne({ User: session_id });
@@ -14,12 +20,11 @@ export var get_tokens = async (session_id) => {
 };
 
 export const update_or_create_token = async (temp) => {
-
   const token = await get_tokens(temp.User);
   console.log(token);
   if (!token) {
     const new_token = new Token(temp);
-    
+
     try {
       await new_token.save();
 
@@ -31,6 +36,7 @@ export const update_or_create_token = async (temp) => {
     const id = { _id: token.id };
     try {
       const new_token = await Token.findOneAndUpdate(id, temp, { new: true });
+      console.log(new_token);
       return new_token;
     } catch (error) {
       console.log({ message: error.message });
@@ -40,12 +46,13 @@ export const update_or_create_token = async (temp) => {
 
 export var is_authenticated = async (session_id) => {
   const token = await get_tokens(session_id);
-  
+
   if (token) {
     const date = new Date();
-    if (token.expiren_in <= date) {
-      var refresh_token = token.refresh_token;
-      const token = await refresh_token(refresh_token);
+
+    const refresh = token.refresh_token;
+    if (token.expires_in <= date) {
+      const token = await refresh_token(refresh, session_id);
       return true;
     } else {
       return true;
@@ -54,13 +61,13 @@ export var is_authenticated = async (session_id) => {
   return false;
 };
 
-export var refresh_token = async (refresh_token) => {
+export const refresh_token = async (refresh_token, session_id) => {
   var authOptions = {
     url: "https://accounts.spotify.com/api/token",
     headers: {
       Authorization:
         "Basic " +
-        new Buffer(client_id + ":" + client_secret).toString("base64"),
+        new Buffer(Client_ID + ":" + Client_Secret).toString("base64"),
     },
     form: {
       grant_type: "refresh_token",
@@ -75,59 +82,76 @@ export var refresh_token = async (refresh_token) => {
       const expires = new Date();
       expires.setSeconds(expires.getSeconds() + exp);
       var temp = {
-        User: req.session.id,
+        User: session_id,
         access_token: body.access_token,
         refresh_token: refresh_token,
         token_type: body.token_type,
         expires_in: expires,
       };
       const token = await update_or_create_token(temp);
+      return token;
     }
   });
-  return token;
 };
 
-export var execute_api_request = async (sessions_id, endpoint, post_=false, put_=false) => {
-  const token = get_tokens(sessions_id);
+export var execute_api_request = async (
+  sessions_id,
+  endpoint,
+  post_ = false,
+  put_ = false
+) => {
+  const token = await get_tokens(sessions_id);
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + token.access_token,
   };
 
+  const url = BASE_URL + endpoint;
   if (post_) {
-    await axios.post(BASE_URL + endpoint, {
-      headers: headers,
-    });
-
-  };
-
-  if (put_) {
-    await axios.put(BASE_URL + endpoint, {
+    await axios.post(url, {
       headers: headers,
     });
   }
 
-  const res = await axios.get(BASE_URL + endpoint, {
-    headers: headers,
-  }).then(res => res.data);
-  
+  if (put_) {
+    await axios.put(url, {
+      headers: headers,
+    });
+  }
+
+  const res = await axios
+    .get(url, {
+      headers: headers,
+    })
+    .then((res) => res.data);
+
   try {
     return res;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
-
-
-export const play_song = (session_id) => {
-  return execute_api_request(session_id, "player/play", put_ = true)
+export const play_song = async (session_id) => {
+  return await execute_api_request(session_id, "player/play", (put_ = true));
 };
 
-export const pause_song = (session_id) => {
-  return execute_api_request(session_id, "player/pause", put_ = true);
+export const pause_song = async (session_id) => {
+  return await execute_api_request(session_id, "player/pause", (put_ = true));
 };
 
-export const skip_song = (session_id) => {
-  return execute_api_request(session_id, "player/next", post_ = true);
+export const skip_song = async (session_id) => {
+  return await execute_api_request(session_id, "player/next", (post_ = true));
+};
+
+export const update_room_song = async (room, song) => {
+  const current_song = room.current_song;
+  if (current_song != song) {
+    const new_one = { current_song: song }
+    const url = "http://localhost:5000/room/update-room/" + room._id;
+    const res = await axios.patch(url
+      , new_one
+    ).then(res => res.data);
+
+  }
 };

@@ -38,6 +38,12 @@ const RoomSchema = new schema({
     required: true,
     default: 2,
   },
+  current_song: {
+    type: String,
+    required: true,
+    default:"no song"
+  },
+
   number_of_participants: {
     type: Number,
     default: 1

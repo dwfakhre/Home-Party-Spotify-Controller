@@ -1,5 +1,6 @@
 import { Token } from "../models/SpotifyTokens.js";
 import { Room } from "../models/room.js";
+import { Votes } from "../models/votes.js";
 import {
   Client_ID,
   Client_Secret,
@@ -10,6 +11,11 @@ import {
   get_tokens,
   is_authenticated,
   update_or_create_token,
+  execute_api_request,
+  update_room_song,
+  pause_song,
+  play_song,
+  skip_song,
 } from "../utils/utils.js";
 import axios from "axios";
 
@@ -33,7 +39,6 @@ export const authenticate_user = async (req, res) => {
   var scope =
     "user-read-playback-state user-modify-playback-state user-read-currently-playing";
 
-
   const URL =
     "https://accounts.spotify.com/authorize?" +
     new URLSearchParams({
@@ -44,7 +49,7 @@ export const authenticate_user = async (req, res) => {
       state: state,
     }).toString();
   res.status(200).json({ url: URL });
-  
+
   console.log("redirected");
 };
 
@@ -61,8 +66,6 @@ export const callback = async (req, res) => {
         }).toString()
     );
   } else {
-
-
     var authOptions = {
       url: "https://accounts.spotify.com/api/token",
       form: {
@@ -77,7 +80,7 @@ export const callback = async (req, res) => {
       },
       json: true,
     };
-    
+
     request.post(authOptions, async (error, response, body) => {
       const exp = body.expires_in;
       const expires = new Date();
@@ -102,4 +105,55 @@ export const callback = async (req, res) => {
 export const is_auth = async (req, res) => {
   const auth = await is_authenticated(req.session.id);
   res.status(200).json({ is_auth: auth });
+};
+
+export const current_song = async (req, res) => {
+  const room_code = req.session.code;
+  try {
+    const req_room = await Room.findOne({ code: room_code });
+
+    const host = req_room.host;
+
+    const data = await execute_api_request(host, "player/currently-playing");
+
+    const item = data.item;
+    const duration = item.duration_ms;
+    const progress = data.progress_ms;
+    const album_cover = item.album.images[1].url;
+    const is_playing = data.is_playing;
+    const song_id = item.id;
+    
+    var artists = "";
+
+    
+  
+    for (var artist in item.artists){
+      if (artist > 0) {
+        artists += ", "
+      }
+    
+      artists += item.artists[artist].name;
+    }
+   
+
+    const votes = await (await Votes.find({ room_code: req_room.code, song_id: song_id })).length;
+
+    const song = {
+      title: item.name,
+      artist: artists,
+      duration: duration,
+      time: progress,
+      image_url: album_cover,
+      is_playing: is_playing,
+      votes: votes,
+      votes_required: req_room.votes_to_skip,
+      id: song_id,
+    };
+    await update_room_song(req_room, song_id);
+    
+    
+    res.status(200).json(song);
+  } catch (error) {
+    res.status(404).json({ message: "room not found" });
+  }
 };

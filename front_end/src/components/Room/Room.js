@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { room_infos } from "../../api";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function Room() {
@@ -18,9 +19,21 @@ export default function Room() {
 
   const { code } = useParams();
 
-  useEffect(async () => {
-    const res = await get_room_infos(code);
-    console.log(res);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    get_room_infos(code);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      get_current_song();
+    }, 500);
+    return () => clearInterval(interval);
+  }, [Room]);
+
+  const get_room_infos = async () => {
+    const res = await room_infos(code);
     setRoom({
       ...Room,
       room_code: code,
@@ -30,16 +43,10 @@ export default function Room() {
       host: res.host,
       guest_can_pause: res.guest_can_pause,
     });
-    console.log(Room);
+
     if (res.isHost) {
       auth_spotify();
     }
-    console.log(Room);
-  }, []);
-
-  const get_room_infos = async () => {
-    const res = await room_infos(code);
-
     return res;
   };
 
@@ -52,7 +59,6 @@ export default function Room() {
       .then((res) => res.json())
       .then((res) => {
         /*  setRoom({ ...Room, spotifyauth: res.is_auth }); */
-        console.log(res.is_auth);
         if (!res.is_auth) {
           fetch("http://localhost:5000/spotify/authen", {
             method: "GET",
@@ -61,11 +67,28 @@ export default function Room() {
           })
             .then((res) => res.json())
             .then((data) => {
-              console.log(data.url);
-              window.location.replace(data.url);
+              navigate(data.url);
             });
         }
       });
   };
-  return <h1>Welcome to this Room {Room.name}</h1>;
+
+  const get_current_song = async () => {
+    await fetch("http://localhost:5000/spotify/current-song", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setRoom({ ...Room, song: data });
+      });
+  };
+
+  return (
+    <div>
+      <h1>Welcome to this Room {Room.song.title}</h1>
+      <img src={Room.song.image_url}></img>
+    </div>
+  );
 }
