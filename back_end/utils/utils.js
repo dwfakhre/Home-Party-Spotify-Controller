@@ -7,7 +7,6 @@ import {
   Redirect_URI,
 } from "../credentials/credentials.js";
 import request from "request";
-
 const BASE_URL = "https://api.spotify.com/v1/me/";
 export var get_tokens = async (session_id) => {
   try {
@@ -94,19 +93,21 @@ export const refresh_token = async (refresh_token, session_id) => {
   });
 };
 
-export var execute_api_request = async (
+export const execute_api_request = async (
   sessions_id,
   endpoint,
   post_ = false,
   put_ = false
 ) => {
   const token = await get_tokens(sessions_id);
+  
   const headers = {
     "Content-Type": "application/json",
     Authorization: "Bearer " + token.access_token,
   };
-
+  
   const url = BASE_URL + endpoint;
+  
   if (post_) {
     await axios.post(url, {
       headers: headers,
@@ -114,6 +115,7 @@ export var execute_api_request = async (
   }
 
   if (put_) {
+    console.log(url);
     await axios.put(url, {
       headers: headers,
     });
@@ -124,6 +126,8 @@ export var execute_api_request = async (
       headers: headers,
     })
     .then((res) => res.data);
+
+  
 
   try {
     return res;
@@ -137,21 +141,54 @@ export const play_song = async (session_id) => {
 };
 
 export const pause_song = async (session_id) => {
-  return await execute_api_request(session_id, "player/pause", (put_ = true));
+  const token = await get_tokens(session_id);
+  
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: "Bearer " + token.access_token,
+  };
+  console.log(headers);
+  const url = BASE_URL + "player/pause";
+  const res = await fetch("https://api.spotify.com/v1/me/player/pause", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    Authorization: "Bearer " + token.access_token,
+  });
+  
+  console.log(res)
+
+  const res1 = await axios
+    .get(url, {
+      headers: headers,
+    })
+    .then((res1) => res1.data);
+
+  try {
+    return res1;
+  } catch (error) {
+    console.log(error);
+  }
+
+  
 };
 
 export const skip_song = async (session_id) => {
   return await execute_api_request(session_id, "player/next", (post_ = true));
 };
 
+export const previous_song = async (session_id) => {
+  return await execute_api_request(
+    session_id,
+    "player/previous",
+    (post_ = true)
+  );
+};
+
 export const update_room_song = async (room, song) => {
   const current_song = room.current_song;
   if (current_song != song) {
-    const new_one = { current_song: song }
+    const new_one = { current_song: song };
     const url = "http://localhost:5000/room/update-room/" + room._id;
-    const res = await axios.patch(url
-      , new_one
-    ).then(res => res.data);
-
+    const res = await axios.patch(url, new_one).then((res) => res.data);
   }
 };

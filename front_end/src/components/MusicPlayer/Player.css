@@ -1,0 +1,88 @@
+.player_container{
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    bottom: 25%;
+    top: 40%;
+    left: 10%;
+    right: 10%;
+    background-color: #F1F2EB;
+height: fit-content;
+    gap: 2rem;
+    border-radius: 5px;
+}
+
+.song_image{
+    display: grid;
+    justify-self: start;
+    align-items: flex-start;
+    justify-items: flex-start;
+   
+    height: fit-content;
+    
+}
+
+.song_image > img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.Song_part{
+    display: flex;
+    flex-direction: column;
+    align-items: space-between;
+    justify-content: space-between;
+    justify-items: flex-start;
+    width: 100%;
+    padding-bottom: 2rem;
+}
+
+.song_title{
+        font-style: italic;
+           
+            color: black;
+            font-size: 2rem;
+}
+
+.player_section{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    justify-items: center;
+    flex-direction: column;
+}
+
+.seeking_section {
+    display: flex;
+width: 75%;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+}
+.seeking_bar{
+    display: flex;
+width: 85%;
+    height: 5px;
+    background-color: #D8DAD3;
+}
+
+.seeking{
+    background-color: #A4C2A5;
+}
+
+.controls{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+    width: 50%;
+
+}
+
+.btn_action > svg{
+    
+    width: 2rem;
+}

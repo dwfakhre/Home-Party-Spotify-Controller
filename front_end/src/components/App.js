@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import "./Home/home.css";
-import Navbar from "./structure/navbar";
+
 import Home from "./Home/home";
 import Joinroom from "./Joining/Join-room";
 import Createroom from "./Creation/Createroom";
@@ -11,7 +11,7 @@ import React from "react";
 function App() {
   return (
     <Router>
-      <Navbar />
+      
       <div className="app__wrapper app_container home-container">
         <Routes>
           <Route path="/" element={<Home />} />

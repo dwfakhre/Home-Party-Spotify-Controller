@@ -1,6 +1,6 @@
 .home-container{
     display: flex;
-    background-color: #2E2C2F;
+    background-color: #D8DAD3;
     
     border: none;
     background-size: cover;
@@ -15,7 +15,7 @@
     margin: 10rem 15rem 1rem 15rem;
     padding: 2rem;
     border-radius: 5px;
-    background: #475B63;
+    background: #A4C2A5;
     justify-content: space-between;
     justify-items: center;
     align-items: center;
@@ -28,11 +28,12 @@
     display: flex;
     font-style: italic;
     text-align: center;
+    padding: 2rem;
     align-content: center;
     align-items: center;
     justify-content: center;
-    font-size: 4rem;
-    color: #F3E8EE;
+    font-size: 2rem;
+    color: #4A4A48;
 
 }
 .home-buttons{

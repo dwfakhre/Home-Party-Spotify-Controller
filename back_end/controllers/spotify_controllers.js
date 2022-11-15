@@ -16,6 +16,7 @@ import {
   pause_song,
   play_song,
   skip_song,
+  previous_song
 } from "../utils/utils.js";
 import axios from "axios";
 
@@ -109,34 +110,34 @@ export const is_auth = async (req, res) => {
 
 export const current_song = async (req, res) => {
   const room_code = req.session.code;
+  
   try {
     const req_room = await Room.findOne({ code: room_code });
 
     const host = req_room.host;
 
     const data = await execute_api_request(host, "player/currently-playing");
-
+    
     const item = data.item;
     const duration = item.duration_ms;
     const progress = data.progress_ms;
     const album_cover = item.album.images[1].url;
     const is_playing = data.is_playing;
     const song_id = item.id;
-    
+
     var artists = "";
 
-    
-  
-    for (var artist in item.artists){
+    for (var artist in item.artists) {
       if (artist > 0) {
-        artists += ", "
+        artists += ", ";
       }
-    
+
       artists += item.artists[artist].name;
     }
-   
 
-    const votes = await (await Votes.find({ room_code: req_room.code, song_id: song_id })).length;
+    const votes = await (
+      await Votes.find({ room_code: req_room.code, song_id: song_id })
+    ).length;
 
     const song = {
       title: item.name,
@@ -151,8 +152,81 @@ export const current_song = async (req, res) => {
     };
     await update_room_song(req_room, song_id);
     
-    
     res.status(200).json(song);
+  } catch (error) {
+    res.status(404).json({ message: "room not found" });
+  }
+};
+
+export const playsong = async (req, res) => {
+  const code = req.session.code;
+  console.log(req.session.code);
+  try {
+    const req_room = await Room.findOne({ code: code });
+    const host = req_room.host;
+    if (req.session.id === host || req_room.guest_can_pause) {
+      await play_song(host);
+    } else {
+      res.status(403).json({ message: "action not allowed" });
+    }
+  } catch (error) {
+    res.status(404).json({ message: "room not found" });
+  }
+};
+
+export const pausesong = async (req, res) => {
+  const code = req.session.code;
+
+  console.log(req.session.code)
+  try {
+    const req_room = await Room.findOne({ code: code });
+    
+    const host = req_room.host;
+    
+    if (req.session.id === host || req_room.guest_can_pause) {
+      await pause_song(host);
+      
+    } else {
+      res.status(403).json({ message: "action not allowed" });
+    }
+  } catch (error) {
+    res.status(404).json({ message: "room not found" });
+  }
+};
+
+export const skipsong = async (req, res) => {
+  const code = req.session.code;
+  console.log(req.session.code);
+  try {
+    const req_room = await Room.findOne({ code: code });
+    
+    const votes = await (
+      await Votes.find({ code: req_room.code, song_id: req_room.current_song })
+    ).length;
+    const host = req_room.host;
+    if (req.session.id === host || votes + 1 >= req_room.votes_to_skip) {
+      await skip_song(host);
+    } else {
+      res.status(403).json({ message: "action not allowed" });
+    }
+  } catch (error) {
+    res.status(404).json({ message: "room not found" });
+  }
+};
+
+export const previoussong = async (req, res) => {
+  const code = req.session.code;
+  try {
+    const req_room = await Room.findOne({ code: code });
+    const votes = await (
+      await Votes.find({ code: req_room.code, song_id: req_room.current_song })
+    ).length;
+    const host = req_room.host;
+    if (req.session.id === host || votes + 1 >= req_room.votes_to_skip) {
+      await previous_song(host);
+    } else {
+      res.status(403).json({ message: "action not allowed" });
+    }
   } catch (error) {
     res.status(404).json({ message: "room not found" });
   }

@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { room_infos } from "../../api";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Player from "../MusicPlayer/Player";
 
 export default function Room() {
-  const [Room, setRoom] = useState({
+  var [Room, setRoom] = useState({
     room_code: "",
     name: "",
     isHost: false,
@@ -67,7 +68,7 @@ export default function Room() {
           })
             .then((res) => res.json())
             .then((data) => {
-              navigate(data.url);
+              window.location.replace(data.url);
             });
         }
       });
@@ -86,9 +87,12 @@ export default function Room() {
   };
 
   return (
-    <div>
-      <h1>Welcome to this Room {Room.song.title}</h1>
-      <img src={Room.song.image_url}></img>
+    <div className="section__padding">
+      <div className="">
+        <h1 className="home-title">Welcome To Room {Room.name}</h1>
+        <Player {...Room.song}></Player>
+      </div>
+      
     </div>
   );
 }
